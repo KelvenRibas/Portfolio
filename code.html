@@ -1,0 +1,445 @@
+<!DOCTYPE html><html class="dark" lang="en" style="scroll-behavior: smooth;"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SYS_OPERATOR // 2024</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.04) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 100;
+            pointer-events: none;
+        }
+        .glitch-border {
+            position: relative;
+        }
+        .glitch-border::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; right: -1px; bottom: -1px;
+            border: 1px solid #2a2a2a;
+            pointer-events: none;
+        }
+        .corner-bracket {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-color: #efe811;
+        }
+        .bracket-tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+        .bracket-br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+        
+        .status-blink {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Smooth section transitions */
+        section {
+            scroll-margin-top: 100px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0e0e0e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #efe811;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#2a2a2a",
+                      "on-primary": "#343200",
+                      "surface-container-lowest": "#0e0e0e",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary-fixed": "#002110",
+                      "on-surface": "#e5e2e1",
+                      "tertiary-fixed-dim": "#ffb3b2",
+                      "surface-tint": "#d2cc00",
+                      "primary-fixed-dim": "#d2cc00",
+                      "secondary": "#f5fff4",
+                      "surface-bright": "#3a3939",
+                      "inverse-on-surface": "#313030",
+                      "on-secondary-container": "#007144",
+                      "on-secondary-fixed-variant": "#005230",
+                      "on-primary-fixed-variant": "#4b4900",
+                      "error-container": "#93000a",
+                      "secondary-container": "#11ffa0",
+                      "surface-container": "#201f1f",
+                      "inverse-surface": "#e5e2e1",
+                      "primary-fixed": "#efe811",
+                      "inverse-primary": "#646100",
+                      "tertiary-fixed": "#ffdad8",
+                      "surface-variant": "#353534",
+                      "tertiary": "#ffffff",
+                      "on-background": "#e5e2e1",
+                      "on-primary-container": "#6a6700",
+                      "on-tertiary": "#680012",
+                      "surface-dim": "#131313",
+                      "on-tertiary-container": "#ca002d",
+                      "surface-container-highest": "#353534",
+                      "tertiary-container": "#ffdad8",
+                      "on-secondary": "#00391f",
+                      "on-tertiary-fixed-variant": "#92001e",
+                      "surface": "#131313",
+                      "on-error": "#690005",
+                      "outline": "#949278",
+                      "surface-container-low": "#1c1b1b",
+                      "on-primary-fixed": "#1e1d00",
+                      "outline-variant": "#494832",
+                      "on-surface-variant": "#cbc7ab",
+                      "secondary-fixed": "#55ffa9",
+                      "on-tertiary-fixed": "#410008",
+                      "secondary-fixed-dim": "#00e38d",
+                      "error": "#ffb4ab",
+                      "primary-container": "#efe811",
+                      "background": "#131313",
+                      "primary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "gutter": "24px",
+                      "margin": "64px",
+                      "container-max": "1440px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "code-data": ["Inter"],
+                      "body-md": ["Inter"],
+                      "h1": ["Space Grotesk"],
+                      "h2": ["Space Grotesk"],
+                      "h3": ["Space Grotesk"],
+                      "mono-label": ["Space Grotesk"]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Scanline Overlay -->
+<div class="scanlines"></div>
+<!-- TopNavBar -->
+<nav class="bg-black/80 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-zinc-800 flex justify-between items-center px-6 py-4 max-w-full">
+<div class="text-xl font-bold tracking-[0.2em] text-yellow-400 hover:italic font-['Space_Grotesk'] uppercase" style="">
+            SYS_OPERATOR//2026
+        </div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-yellow-400 border-b border-yellow-400 pb-1 font-['Space_Grotesk'] tracking-tighter uppercase font-medium hover:text-cyan-400 hover:skew-x-[-12deg] transition-all duration-75" href="#identity" style="">IDENTITY</a>
+<a class="text-zinc-500 font-mono font-['Space_Grotesk'] tracking-tighter uppercase font-medium hover:text-cyan-400 hover:skew-x-[-12deg] transition-all duration-75" href="#work" style="">WORK</a>
+<a class="text-zinc-500 font-mono font-['Space_Grotesk'] tracking-tighter uppercase font-medium hover:text-cyan-400 hover:skew-x-[-12deg] transition-all duration-75" href="#tech" style="">TECH_STACK</a>
+<a class="text-zinc-500 font-mono font-['Space_Grotesk'] tracking-tighter uppercase font-medium hover:text-cyan-400 hover:skew-x-[-12deg] transition-all duration-75" href="#terminal" style="">TERMINAL</a>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-yellow-400 cursor-pointer hover:text-cyan-400 transition-colors" data-icon="settings_input_component" style="">settings_input_component</span>
+<span class="material-symbols-outlined text-yellow-400 cursor-pointer hover:text-cyan-400 transition-colors" data-icon="terminal" style="">terminal</span>
+</div>
+</nav>
+<main class="pt-24 pb-32 max-w-[1440px] mx-auto px-6 md:px-12">
+<!-- Hero / Identity Section -->
+<section class="min-h-[85vh] flex flex-col justify-center items-start mb-margin" id="identity">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-3 h-3 bg-primary-fixed status-blink"></div>
+<span class="font-mono-label text-mono-label text-primary-fixed uppercase tracking-widest" style="">System Online // Session Alpha-01</span>
+</div>
+<h1 class="font-h1 text-h1 text-[64px] md:text-[120px] leading-[0.85] uppercase mb-8 glitch-text" style="">
+                SYSTEM OPERATOR<br><span class="text-primary-fixed italic" style="">SHAULIN_R</span>
+</h1>
+<div class="max-w-2xl border-l-4 border-primary-fixed pl-6 py-2">
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed" style="">
+                    Desenvolvedor focado em sistemas modernos e interfaces de alta performance. <br>Atuo na interseção entre código limpo, experiências imersivas e arquitetura escalável. Construindo soluções digitais com precisão, <span class="text-primary-fixed" style="">velocidade</span> e <span class="text-secondary-fixed" style="">estética</span>.
+                </p>
+<div class="mt-8 flex flex-wrap gap-4">
+<a class="bg-primary-fixed text-on-primary-fixed px-8 py-3 font-mono-label text-mono-label uppercase font-bold tracking-widest hover:skew-x-[-6deg] transition-transform active:scale-95 inline-block text-center" href="#terminal" style="">
+                        INITIALIZE_CONTACT
+                    </a>
+<a class="border border-outline-variant text-on-surface px-8 py-3 font-mono-label text-mono-label uppercase tracking-widest hover:bg-surface-container-high transition-colors inline-block text-center" href="#work" style="">
+                        VIEW_DATA_LOGS
+                    </a>
+</div>
+</div>
+</section>
+<!-- Projects Bento Grid -->
+<section class="mb-margin" id="work">
+<div class="flex justify-between items-end mb-12 border-b border-zinc-800 pb-4">
+<h2 class="font-h2 text-h2 uppercase" style="">IDENTITY_LOG</h2>
+<span class="font-mono-label text-zinc-500 hidden md:block" style="">ROOT/PROJECTS/ALL</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Large Project Card -->
+<div class="md:col-span-8 group relative overflow-hidden bg-surface-container-low border border-zinc-800 hover:border-secondary-fixed transition-all duration-300">
+<div class="corner-bracket bracket-tl"></div>
+<div class="corner-bracket bracket-br"></div>
+<div class="aspect-video overflow-hidden">
+<img alt="Cyberpunk workspace" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100" data-alt="Futuristic dark computer hardware and glowing blue circuits on a desk in a dark room with neon highlights" src="https://virtual.ucdb.br/moodle/user/pix.php?file=/109465/f1.jpg/1" style="">
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-h3 text-h3 uppercase" style="">PROJECT: NEURAL_LINK</h3>
+<span class="text-secondary-fixed font-mono-label text-xs border border-secondary-fixed px-2 py-1 uppercase" style="">Status: ONline</span>
+</div>
+<p class="text-on-surface-variant mb-6 font-body-md" style="">Criador de soluções digitais com foco em performance e experiência. Interesse em tecnologia, games e interfaces futuristas. Sempre evoluindo, sempre construindo.</p>
+<div class="flex gap-4">
+<span class="font-code-data text-code-data text-zinc-500 uppercase" style="">#rust</span>
+<span class="font-code-data text-code-data text-zinc-500 uppercase" style="">#webassembly</span>
+<span class="font-code-data text-code-data text-zinc-500 uppercase" style="">#glsl</span>
+</div>
+</div>
+</div>
+<!-- Side Project Card / Bio Info -->
+<div class="md:col-span-4 group relative bg-surface-container-low border border-zinc-800 hover:border-tertiary-fixed-dim transition-all duration-300">
+<div class="p-8 flex flex-col h-full">
+<div class="mb-auto">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-4xl mb-4" data-icon="memory" style="">memory</span>
+<h3 class="font-h3 text-h3 uppercase text-2xl mb-4" style="">Shaulin_R</h3>
+<div class="text-on-surface-variant font-body-md text-sm space-y-1">
+<p class="" style="">NAME: Kelven Ribas</p>
+<p class="" style="">CLASS: Full Stack Developer</p>
+<p class="" style="">SPEC: Systems + UI/UX</p>
+<p class="" style="">STACK: JS / Node.js / React</p>
+<p class="" style="">LVL: 21</p>
+<p class="" style="">STATUS: Online</p>
+</div>
+</div>
+<div class="pt-8 mt-8 border-t border-zinc-800">
+<a class="text-tertiary-fixed-dim font-mono-label text-sm uppercase flex items-center gap-2 hover:gap-4 transition-all" href="#" style="">
+                                VIEW_SOURCE <span class="material-symbols-outlined text-sm" data-icon="arrow_forward" style="">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Smaller Grid Items -->
+<div class="md:col-span-4 group relative bg-surface-container-low border border-zinc-800 p-6 hover:border-secondary-fixed transition-colors">
+<div class="aspect-square bg-zinc-900 mb-6 flex items-center justify-center overflow-hidden">
+<img alt="Abstract tech" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" data-alt="Abstract 3D render of glowing hexagonal structures in deep blue and purple neon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBECHmdQhsbeKsmBIHhE8uoQtiKqlKOIs6yyEcUwn2pXoe36BNZn8BPLwmNQVCC1f72yLxg8jLuwfVoS2Dvc_gmiXcVSOkxJGLavY_BW6r1FffkzSYGzemcI8s6NouK5Lg486UatoEpsj_PGLShRJvazSmmyI5jB0HToAKK6m4gXsuiRQhRrXoBufBXJH-fQNl3QGhGlVsFmuvrMe895I0taao7EdwRW62-rttMPBqTdYzFxZXm6onvOpJhIfok66tDSNIUJy8pi6U" style="">
+</div>
+<h4 class="font-mono-label text-lg uppercase mb-2" style="">PORTFOLIO_SYSTEM</h4>
+<p class="text-on-surface-variant text-sm font-body-md" style="">Interface cyberpunk desenvolvida com foco em identidade visual forte, animações fluidas e responsividade total.</p>
+</div>
+<div class="md:col-span-4 group relative bg-surface-container-low border border-zinc-800 p-6 hover:border-secondary-fixed transition-colors">
+<div class="aspect-square bg-zinc-900 mb-6 flex items-center justify-center overflow-hidden">
+<img alt="Digital grid" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" data-alt="Digital grid patterns with flowing light streaks in neon cyan and magenta colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgW0WeAUQwpDrMG0JHsHtMbXMxiLhAOyzA-W5-C4SY8jvpid_bHWXjX1-YQUku6ygHwtL52ewPYiNsDSLMPEXcRKC2q7H4T2ZM7_4bnfj_o3Ry0rfNUwS73FLowmaRpZcB49K3-pK9QNOp0AOR168nhjKHMdR3En5I3_0PNg3lOvp7HuCbNy_B1znN_D5qPi5ZcRZqsNvuaWJl-k5Wi3u4_NuDqpzYQmNkF0LyJOynxsdps37Hsd2p4_fYr6FULGTvGwOh_TPC5eU" style="">
+</div>
+<h4 class="font-mono-label text-lg uppercase mb-2" style="">API_NODE_CORE</h4>
+<p class="text-on-surface-variant text-sm font-body-md" style="">API REST para gerenciamento de dados com autenticação e filtros dinâmicos.</p>
+</div>
+<div class="md:col-span-4 group relative bg-surface-container-low border border-zinc-800 p-6 hover:border-secondary-fixed transition-colors">
+<div class="aspect-square bg-zinc-900 mb-6 flex items-center justify-center overflow-hidden">
+<img alt="Motherboard" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" data-alt="Macro photo of a green circuit board with glowing golden tracers and electronic components" src="https://horadecodar.com.br/wp-content/uploads/2023/06/banco-de-dados-1024x1024.png" style="">
+</div>
+<h4 class="font-mono-label text-lg uppercase mb-2" style="">Sistema_De_Biblioteca</h4>
+<p class="text-on-surface-variant text-sm font-body-md" style="">API REST em Node.js e Express com CRUD, validações e regras de negócio complexas.</p>
+</div>
+</div>
+</section>
+<!-- Tech Stack Section -->
+<section class="mb-margin" id="tech">
+<div class="bg-surface-container-high/30 p-8 md:p-12 border border-zinc-800 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary-fixed"></div>
+<div class="md:pl-12">
+<h2 class="font-h2 text-h2 uppercase mb-12" style="">TECH_STACK</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8">
+<div>
+<span class="font-mono-label text-zinc-500 uppercase text-xs mb-4 block" style="">Engine_Room</span>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">React / Next.js</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">TypeScript</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">HTML5 / CSS3</span>
+</div>
+</div>
+</div>
+<div>
+<span class="font-mono-label text-zinc-500 uppercase text-xs mb-4 block" style="">Core_Logic</span>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">JAVASCRIPT</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">Node.js</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">Python</span>
+</div>
+</div>
+</div>
+<div>
+<span class="font-mono-label text-zinc-500 uppercase text-xs mb-4 block" style="">Data_Flow</span>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">PostgreSQL</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">MYSQL</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">Redis</span>
+</div>
+</div>
+</div>
+<div>
+<span class="font-mono-label text-zinc-500 uppercase text-xs mb-4 block" style="">System_Ops</span>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">GIT / GITHUB</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">NETLIFY / VERCEL</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary-fixed"></div>
+<span class="font-mono-label text-on-surface uppercase" style="">API REST</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Terminal Contact Section -->
+<section class="max-w-4xl mx-auto" id="terminal">
+<div class="border border-zinc-800 bg-surface-container-lowest relative">
+<div class="bg-zinc-900 px-4 py-2 border-b border-zinc-800 flex justify-between items-center">
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-error-container"></div>
+<div class="w-3 h-3 rounded-full bg-primary-fixed"></div>
+<div class="w-3 h-3 rounded-full bg-secondary-fixed"></div>
+</div>
+<span class="font-mono-label text-[10px] text-zinc-500" style="">SESSION_TTY1 - ENCRYPTED</span>
+</div>
+<div class="p-8 font-mono-label text-sm leading-relaxed">
+<p class="text-zinc-500 mb-2" style="">Last login: Wed Oct 25 20:41:03 on ttys004</p>
+<p class="text-secondary-fixed mb-6" style=""><br></p>
+<div class="space-y-6">
+<div class="flex flex-col gap-2">
+<label class="text-primary-fixed uppercase tracking-widest text-[10px]" style="">Command: ./set-sender</label>
+<input class="bg-transparent border-b border-zinc-800 focus:border-secondary-fixed outline-none py-2 text-on-surface placeholder:text-zinc-700 w-full font-mono" placeholder="IDENTITY_IDENTIFIER" type="text">
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-primary-fixed uppercase tracking-widest text-[10px]" style="">Command: ./set-message</label>
+<textarea class="bg-transparent border-b border-zinc-800 focus:border-secondary-fixed outline-none py-2 text-on-surface placeholder:text-zinc-700 w-full font-mono resize-none" placeholder="DATA_PAYLOAD" rows="4"></textarea>
+</div>
+<div class="pt-4 flex flex-col md:flex-row justify-between items-center gap-6">
+<button class="w-full md:w-auto bg-primary-fixed text-on-primary-fixed px-10 py-4 uppercase font-black tracking-[0.2em] hover:bg-white transition-colors" style="">
+                                EXECUTE_SEND
+                            </button>
+<div class="flex gap-6">
+<a class="text-zinc-500 hover:text-primary-fixed transition-colors" href="#" style="">
+<span class="material-symbols-outlined" data-icon="hub" style="">hub</span>
+</a>
+<a class="text-zinc-500 hover:text-primary-fixed transition-colors" href="#" style="">
+<span class="material-symbols-outlined" data-icon="database" style="">database</span>
+</a>
+<a class="text-zinc-500 hover:text-primary-fixed transition-colors" href="#" style="">
+<span class="material-symbols-outlined" data-icon="person" style="">person</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-black w-full border-t border-zinc-900">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 py-12 gap-6 max-w-[1440px] mx-auto">
+<div class="text-zinc-700 font-black font-mono text-xs uppercase text-center md:text-left" style="">
+                © 2024 ADMIN_SESSION. [UNAUTHORIZED ACCESS PROHIBITED]
+            </div>
+<div class="flex gap-8">
+<a class="font-mono text-xs text-zinc-500 hover:text-yellow-400 hover:underline decoration-yellow-400 underline-offset-4 hover:italic transition-all" href="#" style="">ENCRYPTED_MAIL</a>
+<a class="font-mono text-xs text-zinc-500 hover:text-yellow-400 hover:underline decoration-yellow-400 underline-offset-4 hover:italic transition-all" href="#" style="">SOURCE_CODE</a>
+<a class="font-mono text-xs text-zinc-500 hover:text-yellow-400 hover:underline decoration-yellow-400 underline-offset-4 hover:italic transition-all" href="#" style="">NEURAL_LINK</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-[10px] text-zinc-600 font-mono" style="">LATENCY: 12MS</span>
+<span class="text-[10px] text-zinc-600 font-mono" style="">STATUS: OPTIMAL</span>
+</div>
+</div>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<div class="fixed bottom-0 left-0 w-full h-16 flex justify-around items-center md:hidden bg-zinc-950/90 backdrop-blur-lg border-t border-zinc-800 z-50">
+<a class="flex flex-col items-center justify-center text-yellow-400 bg-yellow-400/10 border-t-2 border-yellow-400 p-2 flex-1" href="#identity" style="">
+<span class="material-symbols-outlined text-xl" data-icon="person" style="">person</span>
+<span class="font-mono text-[10px] tracking-widest uppercase" style="">BIO</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-500 p-2 flex-1" href="#work" style="">
+<span class="material-symbols-outlined text-xl" data-icon="database" style="">database</span>
+<span class="font-mono text-[10px] tracking-widest uppercase" style="">CODE</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-500 p-2 flex-1" href="#tech" style="">
+<span class="material-symbols-outlined text-xl" data-icon="memory" style="">memory</span>
+<span class="font-mono text-[10px] tracking-widest uppercase" style="">GEAR</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-500 p-2 flex-1" href="#terminal" style="">
+<span class="material-symbols-outlined text-xl" data-icon="hub" style="">hub</span>
+<span class="font-mono text-[10px] tracking-widest uppercase" style="">LINK</span>
+</a>
+</div>
+<script>
+        // Update active mobile nav state based on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.fixed.bottom-0 a');
+            
+            let current = "";
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 120) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('text-yellow-400', 'bg-yellow-400/10', 'border-t-2', 'border-yellow-400');
+                link.classList.add('text-zinc-500');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('text-yellow-400', 'bg-yellow-400/10', 'border-t-2', 'border-yellow-400');
+                    link.classList.remove('text-zinc-500');
+                }
+            });
+        });
+    </script>
+</body></html>
